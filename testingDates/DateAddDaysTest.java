@@ -8,16 +8,18 @@ public class DateAddDaysTest {
 	
 	@Test
 	public void stayInSameMonth() {
-		assertEquals(new Date("March", 9, 2025), testDate.addDay(5));
+		assertEquals(new Date("March", 9, 2025), testDate.addOneDay());
 	}
 	
 	@Test
 	public void crossMonth() {
-		assertEquals(new Date("April", 7, 2025), testDate.addDay(30));
+		Date test2 = new Date("March", 31, 2025);
+		assertEquals(new Date("April", 1, 2025), test2.addOneDay());
 	}
 	
 	@Test
 	public void crossYear() {
-		assertEquals(new Date("March", 8, 2026), testDate.addDay(365));
+		Date test3 = new Date("December", 31, 2025);
+		assertEquals(new Date("January", 1, 2026), test3.addOneDay());
 	}
 }

@@ -58,18 +58,18 @@ public class Date
         }
     }
 
-    public void setDate(String monthString, int day, int year)
+    public Date setDate(String monthString, int day, int year)
     {
         if (dateOK(monthString, day, year))
         {
             this.month = monthString;
             this.day = day;
             this.year = year;
+            return this;
         }
         else
         {
-            System.out.println("Fatal Error in setDate(String,int, int)");
-            System.exit(0);
+            return null;
         }
     }
 
@@ -164,6 +164,17 @@ public class Date
         return ( (month.equals(otherDate.month))
                   && (day == otherDate.day) && (year == otherDate.year) );
     }
+    @Override
+    public Object clone() {
+    return new Date(this);
+    }
+    @Override
+    public boolean equals(Object maybeDate) {
+    if (maybeDate == null || maybeDate.getClass() != getClass()) return false;
+    Date maybeCopy = (Date) maybeDate;
+    return maybeCopy.day == day && maybeCopy.month == month && maybeCopy.year ==
+    year;
+    }
 
     public boolean precedes(Date otherDate)
     {
@@ -203,9 +214,10 @@ public class Date
 
     private boolean dateOK(String monthString, int dayInt, int yearInt)
     {
-        return ( monthOK(monthString) &&
-                 (dayInt >= 1) && (dayInt <= 31) &&
-                 (yearInt >= 1000) && (yearInt <= 9999) );
+    	return ( monthOK(monthString) &&
+                (dayInt >= 1) && (dayInt <= 31) &&
+                (yearInt >= 1000) && (yearInt <= 9999) &&
+                !(monthString.equals("February") && dayInt > 28));
     }
 
     private boolean monthOK(String month)
@@ -252,6 +264,52 @@ public class Date
             return "Error"; //to keep the compiler happy
         }
     }
+    
+    Date addOneDay() {
+    	this.day ++;
+    	
+    	if (day > daysInMonth(this.month)) {
+    		day = 1;
+    		if (this.month == "January") {
+    			this.month = "February";
+    		} else if (this.month == "February" ) {
+    			this.month = "March";
+    		} else if (this.month == "March" ) {
+    			this.month = "April";
+    		} else if (this.month == "April" ) {
+    			this.month = "May";
+    		} else if (this.month == "May" ) {
+    			this.month = "June";
+    		} else if (this.month == "June" ) {
+    			this.month = "July";
+    		} else if (this.month == "July" ) {
+    			this.month = "August";
+    		} else if (this.month == "August" ) {
+    			this.month = "September";
+    		} else if (this.month == "September" ) {
+    			this.month = "October";
+    		} else if (this.month == "October" ) {
+    			this.month = "November";
+    		} else if (this.month == "November" ) {
+    			this.month = "December";
+    		} else {
+    			this.month = "January";
+    			this.year ++;
+    		}
+    	}
+    	return this;
+    }
+    
+    private int daysInMonth(String month) {
+    	if(month == "January" || month == "March" || month == "May" || month == "July" || month == "August" || month == "October" || month == "December") {
+    		return 31;
+    	} else if (month == "February") {
+    		return 28;
+    	} else {
+    		return 30;
+    	}
+    }
+    
     public static void main(String[] args) {
         System.out.println("Main in Date.");
         Date tester = new Date();
